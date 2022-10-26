@@ -25,74 +25,73 @@ const fetchData = async () => {
     return res
 }
 
+const btns = [...document.querySelectorAll('.btn')]
+
 const generateSkin = async () => {
   const ans = await fetchData()
   
   const randNum = Math.floor(Math.random() * (ans.data.length - 1))
   console.log(randNum, ans.data.length)
 
-  const skinBaseData = ans.data[randNum].displayName.toLowerCase().split(' ')
-  console.log(skinBaseData)
+  const selectedSkin = ans.data[randNum].displayName.includes('Standard') 
+    || ans.data[randNum].displayName.includes('Sovereign')
+      ? ans.data[randNum + 1]
+      : ans.data[randNum]
+
+  const skinBaseData = selectedSkin.displayName.toLowerCase().split(' ')
+  console.log(skinBaseData) // separa cada palavra da skins selecionada
   const skinBase = weapons.filter(weapon => skinBaseData.includes(weapon))
-  console.log(skinBase)
+  console.log(skinBase) // vandal, phantom, etc...
 
   if(skinBase.length <= 0) {
+    console.log('Skin fora da lista encontrada.')
     generateSkin()
     return
-  }
+  } // se a skin não for uma arma da lista, return
 
-  const skinsData = ans.data.filter(skin => skin.displayName.toLowerCase().includes(skinBase)
-    && !skin.displayName.includes('Standard'))
-  console.log(skinsData)
-
-  const randNumSkin = Math.floor(Math.random() * (skinsData.length - 1))
-  console.log(randNumSkin)
-
-  if(skinsData[randNumSkin].displayIcon) {
+  if(selectedSkin.displayIcon) {
     document.querySelector('#skin_img').src =
-      skinsData[randNumSkin].displayIcon
+    selectedSkin.displayIcon // se a arma tiver skin, carrega.
   } else {
     console.log('Não foi possível carregar a imagem. Tentando novamente.')
     generateSkin()
     return
   }
 
-  const btns = [...document.querySelectorAll('.btn')]
+  const skinsDataAux = ans.data.filter(skin => skin.displayName.toLowerCase().includes(skinBase)
+    && !skin.displayName.includes('Standard')
+    && skin.displayName !== selectedSkin.displayName)
+  console.log(`Apenas ${skinBase}`, skinsDataAux) // filtra skins do mesmo tipo, só vandal etc..
 
-  console.log(btns.length, btns)
+  // gera posição da resposta
+  const randNumBtnAns = Math.floor(Math.random() * (btns.length))
 
-  // const btnArr = generateArray(4)
-  // for(let i = 0; i < btns.length; i++) {
-  //   btns[i].innerHTML = btnArr[i]
-  // }
-
-  const randNumAnswer = Math.floor(Math.random() * (btns.length))
-  btns[randNumAnswer].innerHTML = skinsData[randNumSkin].displayName
-
+  const arr = []
+  let hasRepeated = false
   btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btns.indexOf(btn) === randNumAnswer
-        ? console.log('Resposta Correta!')
-        : console.log('Resposta Incorreta!')
-    })
+    const randNumBtn = Math.floor(Math.random() * (skinsDataAux.length - 1))
+    arr.push(randNumBtn)
+    const unique = [...new Set(arr)]
+    
+    if(arr.length === unique.length) {
+      btn.innerHTML = skinsDataAux[randNumBtn].displayName
+    } else {
+      console.log('repetido')
+      hasRepeated = true
+      generateSkin() //////////////////////////
+      return
+    }
+
+    if(!hasRepeated) {
+      btn.addEventListener('click', () => {
+        btns.indexOf(btn) === randNumBtnAns
+          ? console.log('Resposta Correta')
+          : console.log('Resposta Incorreta')
+        })
+    }
+    
   })
+  btns[randNumBtnAns].innerHTML = selectedSkin.displayName
 }
-
-// function generateArray(size) {
-//   const arr = []
-
-//   while(arr.length !== size) {
-//     for(let i = 0; i < size.length; i++) {
-
-//     i = Math.floor(Math.random() * size)
-
-//     if(!arr.includes(i)) {
-//       arr.push(i)
-//       console.log(arr)
-//     }
-//   }
-//   }
-//   return arr
-// }
 
 generateSkin()
