@@ -1,6 +1,5 @@
 const btns = [...document.querySelectorAll('.btn')]
 const generateBtn = document.querySelector('#generate_btn')
-const answerText = document.querySelector('#ans_text')
 
 const weapons = [
   'classic',
@@ -32,10 +31,11 @@ const fetchData = async () => {
 const generateSkin = async () => {
   const ans = await fetchData()
 
+  generateBtn.disabled = true
   btns.forEach(btn => {
+    btn.style.background = 'white'
     btn.disabled = false
   })
-  answerText.innerHTML = ''
   
   const randNum = Math.floor(Math.random() * (ans.data.length - 1))
   console.log(randNum, ans.data.length)
@@ -92,9 +92,10 @@ const generateSkin = async () => {
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         btns.indexOf(btn) === randNumBtnAns
-          ? answerText.innerHTML = 'Acertou parabéns'
-          : answerText.innerHTML = 'Como tu errou mano deixa de ser burro'
+          ? btn.style.background = 'green'
+          : btn.style.background = 'red'
 
+          generateBtn.disabled = false
           btns.forEach(btn => {
             btn.disabled = true
           })
