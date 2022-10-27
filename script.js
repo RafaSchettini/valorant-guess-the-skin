@@ -26,6 +26,8 @@ const fetchData = async () => {
 }
 
 const btns = [...document.querySelectorAll('.btn')]
+const generateBtn = document.querySelector('#generate_btn')
+const answerText = document.querySelector('#ans_text')
 
 const generateSkin = async () => {
   const ans = await fetchData()
@@ -85,13 +87,11 @@ const generateSkin = async () => {
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         btns.indexOf(btn) === randNumBtnAns
-          ? console.log('Resposta Correta')
-          : console.log('Resposta Incorreta')
+          ? answerText.innerHTML = 'Acertou parabéns'
+          : answerText.innerHTML = 'Como tu errou mano deixa de ser burro'
         })
     })
   }
 
   btns[randNumBtnAns].innerHTML = selectedSkin.displayName
 }
-
-generateSkin()
