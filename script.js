@@ -66,31 +66,31 @@ const generateSkin = async () => {
   // gera posição da resposta
   const randNumBtnAns = Math.floor(Math.random() * (btns.length))
 
-  const arr = []
-  let hasRepeated = false
+  let hasRepeated = false, arr = []
   btns.forEach(btn => {
     const randNumBtn = Math.floor(Math.random() * (skinsDataAux.length - 1))
     arr.push(randNumBtn)
     const unique = [...new Set(arr)]
     
-    if(arr.length === unique.length) {
-      btn.innerHTML = skinsDataAux[randNumBtn].displayName
-    } else {
-      console.log('repetido')
-      hasRepeated = true
-      generateSkin() //////////////////////////
-      return
-    }
+    arr.length === unique.length
+      ? btn.innerHTML = skinsDataAux[randNumBtn].displayName
+      : hasRepeated = true
+  })
 
-    if(!hasRepeated) {
+  if(hasRepeated) {
+    console.log('Números repetidos. Gerando skin novamente')
+    generateSkin()
+    return
+  } else {
+    btns.forEach(btn => {
       btn.addEventListener('click', () => {
         btns.indexOf(btn) === randNumBtnAns
           ? console.log('Resposta Correta')
           : console.log('Resposta Incorreta')
         })
-    }
-    
-  })
+    })
+  }
+
   btns[randNumBtnAns].innerHTML = selectedSkin.displayName
 }
 
