@@ -23,8 +23,20 @@ body {
   background-color: blue;
 }
 
-.container .btn {
-  padding: 10px;
+.container .btn, #generate_btn {
+  padding: 1em;
+  width: 200px;
   margin: 30px 0 30px 0;
+  position: relative;
   border: none;
+  background: white;
+}
+
+.container .btn:hover, #generate_btn:hover {
+  cursor: pointer;
+  background: #b7b6b6;
+}
+
+.container #points_txt {
+  text-align: center;
 }
