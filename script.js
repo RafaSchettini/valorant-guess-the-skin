@@ -1,6 +1,13 @@
 const container = document.querySelector('.container')
-const generateBtn = document.querySelector('#generate_btn')
-const pointsTxt = document.querySelector('#points_txt')
+const generateBtn = document.querySelector('.generate_btn')
+const pointsTxt = document.querySelector('.points_txt')
+const resultPointsTxt = document.querySelector('.result_points_txt')
+const roundsTxt = document.querySelector('.rounds_txt')
+const loader = document.querySelector('.loader')
+const box = document.querySelector('.box-all')
+const restartGameBtn = document.querySelector('.restart_game_btn')
+
+const skinImg = document.querySelector('#skin_img')
 
 const weapons = [
   'classic',
@@ -30,11 +37,14 @@ const fetchData = async () => {
 }
 
 let points = 0, counter = 0
-pointsTxt.innerHTML = `Points: ${points}/3`
+pointsTxt.innerHTML = `Points: ${points}`
+roundsTxt.innerHTML = `Rounds: ${counter}/20`
+
 const generateSkin = async () => {
+  loader.style.display = 'block'
+  skinImg.style.display = 'none'
+  // box.style.display = 'none'
   const ans = await fetchData()
-  generateBtn.style.background = 'white'
-  generateBtn.style.display = 'none'
 
   let btns = [...document.querySelectorAll('.btn')]
 
@@ -50,6 +60,7 @@ const generateSkin = async () => {
     btns.push(button)
   }
 
+  generateBtn.style.display = 'none'
   generateBtn.disabled = true
   
   const randNum = Math.floor(Math.random() * (ans.data.length - 1))
@@ -72,8 +83,11 @@ const generateSkin = async () => {
   } // se a skin não for uma arma da lista, return
 
   if(selectedSkin.displayIcon) {
-    document.querySelector('#skin_img').src =
-    selectedSkin.displayIcon // se a arma tiver skin, carrega.
+    skinImg.src = selectedSkin.displayIcon
+    setTimeout(() => {
+      loader.style.display = 'none'
+      skinImg.style.display = 'block'
+    }, 500) // se a arma tiver skin, carrega.
   } else {
     console.log('Não foi possível carregar a imagem. Tentando novamente.')
     generateSkin()
@@ -107,16 +121,15 @@ const generateSkin = async () => {
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         if(btns.indexOf(btn) === randNumBtnAns) {
-          btn.style.background = 'green'
+          btn.className = 'btn right-answer'
           points += 1
-          pointsTxt.innerHTML = `Points: ${points}/3`
+          pointsTxt.innerHTML = `Points: ${points}`
         } else {
-          btn.style.background = 'red'
-          btns[randNumBtnAns].style.background = 'green'
+          btn.className = 'btn wrong-answer'
+          btns[randNumBtnAns].className = 'btn right-answer'
         }
-        
+    
         generateBtn.disabled = false
-        generateBtn.style.background = 'cyan'
         generateBtn.style.display = 'block'
         btns.forEach(btn => {
           btn.disabled = true
@@ -124,6 +137,7 @@ const generateSkin = async () => {
         })
 
         counter++
+        roundsTxt.innerHTML = `Rounds: ${counter}/20`
         console.log('rodada:', counter)
         handleGameOver()
       })
@@ -134,11 +148,26 @@ const generateSkin = async () => {
 }
 
 function handleGameOver() {
-  if(counter >= 3) {
-    console.log(`Fim de Jogo! Pontos: ${points}/3`)
-    pointsTxt.innerHTML = `Fim de jogo <br> Points: ${points}/3`
+  if(counter >= 20) {
+    console.log(`Fim de Jogo! Pontos: ${points}/20`)
     generateBtn.style.display = 'none'
+    box.style.display = 'block'
+    resultPointsTxt.innerHTML = `Você fez ${points} pontos em ${counter} rodadas!`
+    restartGameBtn.addEventListener('click', () => {
+      restartGame()
+      setTimeout(() => {
+        box.style.display = 'none'
+      }, 700)
+    })
   }
+}
+
+function restartGame() {
+  points = 0
+  counter = 0
+  pointsTxt.innerHTML = `Points: ${points}`
+  roundsTxt.innerHTML = `Rounds: ${counter}/20`
+  generateSkin()
 }
 
 window.onload = generateSkin()

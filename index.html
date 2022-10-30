@@ -12,12 +12,28 @@
   <script src="script.js" defer></script>
 </head>
 <body>
+
   <div class="container">
+    
+    <div class="text-container">
+      <h1 class="points_txt"></h1>
+      <h1 class="rounds_txt"></h1>
+    </div>
 
-    <img id="skin_img" src="" alt="Skin Image">
-    <h1 id="points_txt"></h1>
+    <div class="wrapper">
+      <div class="loader"></div>
+      <img id="skin_img" src="" alt="Skin Image">
+    </div>
 
-    <button id="generate_btn" onclick="generateSkin()">Gerar nova skin</button>
+    <button class="generate_btn" onclick="generateSkin()">Gerar nova skin</button>
   </div>
+
+  <div class="box-all">
+    <div class="box-endGame">
+      <h1 class="result_points_txt"></h1>
+      <button class="restart_game_btn">Jogar Novamente</button>
+    </div>
+  </div>
+
 </body>
 </html>

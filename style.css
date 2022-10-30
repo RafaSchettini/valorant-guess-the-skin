@@ -1,42 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg-color: #79083E;
+  --bg-darker-color: #610632;
+  --bg-darker-color-2: #490525;
+  --btn-green: #00ba7c;
+  --btn-red: #f91880;
+  --btn-blue: #1d9bf0;
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
 }
 
 body {
-  background-color: #989595;
+  background-color: var(--bg-color);
 }
 
 .container {
-  width: 500px;
+  width: 700px;
   height: 100vh;
   margin: auto;
   justify-content: center;
   align-items: center;
-  background-color: rgb(85, 31, 31);
+  background-color: var(--bg-darker-color);
   display: flex;
   flex-direction: column;
 }
 
-.container img {
-  background-color: blue;
+.container .wrapper {
+  background-color: var(--bg-darker-color-2);
+  border-radius: 10px;
+  margin-bottom: 30px;
+  width: 640px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.container .btn, #generate_btn {
+.container .wrapper img {
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+}
+
+.container .btn, .generate_btn, .restart_game_btn{
   padding: 1em;
-  width: 200px;
-  margin: 30px 0 30px 0;
+  width: 640px;
+  margin: 15px 0 15px 0;
   position: relative;
-  border: none;
-  background: white;
+  border: solid 5px var(--bg-darker-color-2);
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.3s;
 }
 
-.container .btn:hover, #generate_btn:hover {
+.container .btn {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.generate_btn {
+  background-color: var(--btn-blue);
+  border-color: var(--btn-blue);
+}
+
+.container .btn:hover, .generate_btn:hover {
   cursor: pointer;
-  background: #b7b6b6;
+  background: var(--bg-darker-color-2);
 }
 
-.container #points_txt {
-  text-align: center;
+.container .text-container {
+  display: flex;
+  justify-content: space-between;
+  width: 640px;
+}
+.container .points_txt {
+  text-align: left;
+  color: white;
+}
+
+.container .rounds_txt {
+  text-align: right;
+  color: white;
+}
+
+.btn.right-answer {
+  background: var(--btn-green);
+  border-color: var(--btn-green);
+}
+
+.btn.wrong-answer {
+  background: var(--btn-red);
+  border-color: var(--btn-red);
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid var(--bg-color);
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.box-all {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}
+
+.box-endGame {
+  width: 60vw;
+  height: 80vh;
+  background: var(--bg-darker-color-2);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.result_points_txt {
+  color: white;
+}
+
+.box-endGame .restart_game_btn {
+  background: var(--bg-color);
+  cursor: pointer;
 }
